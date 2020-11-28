@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>index</title>
+  </head>
+  <body>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="/index" method="POST">
+      <label for="id">ID:</label><br />
+      <input type="input" id="id" /><br />
+      <label for="id">Name:</label><br />
+      <input type="input" id="name" />
+      <input type="submit" value="Search" />
+    </form>
+    {% if students %}
+    <ul>
+      {% for student in students %}
+      <li>
+        <a href="/info?id={{student.id}}/">{{student.id}}</a>
+        <a>{{student.name}}</a> <a href="/delete?id={{student.id}}/">Delete</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No results.</p>
+    {% endif %}
+
+    <form action="/create">
+      <input type="submit" value="Add new student+" />
+    </form>
+  </body>
+</html>
