@@ -124,6 +124,6 @@ STATICFILES_DIRS = [
     Path.joinpath(BASE_DIR, r"\static") 
 ]
 # for upload photo
-MEDIA_ROOT = Path.joinpath(BASE_DIR, r"\media") 
+MEDIA_ROOT = Path.joinpath(BASE_DIR, r"media") 
 
 MEDIA_URL = '/media/'

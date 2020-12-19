@@ -1,0 +1,17 @@
+django/app/__pycache__/__init__.cpython-39.pyc
+django/app/__pycache__/admin.cpython-39.pyc
+django/app/__pycache__/apps.cpython-39.pyc
+django/app/__pycache__/models.cpython-39.pyc
+django/app/__pycache__/form.cpython-39.pyc
+django/db.sqlite3
+django/app/__pycache__/plugin.cpython-39.pyc
+django/app/__pycache__/urls.cpython-39.pyc
+django/app/__pycache__/views.cpython-39.pyc
+django/app/migrations/__pycache__/__init__.cpython-39.pyc
+django/app/migrations/__pycache__/0001_initial.cpython-39.pyc
+django/app/migrations/__pycache__/0002_auto_20201219_2345.cpython-39.pyc
+django/app/migrations/0002_auto_20201219_2345.py
+django/fake_http_site/__pycache__/__init__.cpython-39.pyc
+django/fake_http_site/__pycache__/settings.cpython-39.pyc
+django/fake_http_site/__pycache__/urls.cpython-39.pyc
+django/fake_http_site/__pycache__/wsgi.cpython-39.pyc
