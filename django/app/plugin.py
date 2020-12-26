@@ -9,7 +9,7 @@ def getStudentByName(Name:str) -> list:
     return []
 
 def getStudentById(id:int) ->  student:
-    return None
+    return student(id=1,name ="alice",photo ="NIL")
 
 def getStudentByIdAndName(id:int, name:str) ->  list:
     l = []
@@ -17,7 +17,7 @@ def getStudentByIdAndName(id:int, name:str) ->  list:
     s = getStudentById(id)
     if s and s not in l:
         l.append(s)
-    return l
+    return [student(id=1,name ="alice",photo ="photos/alice.png"),student(id=2,name ="tom",photo ="NIL")]
 
 def createStudent(s_form:StudentForm) -> bool:
     id = s_form.cleaned_data["id"]
