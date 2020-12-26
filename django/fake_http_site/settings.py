@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as messages
+
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success'
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -121,9 +130,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    Path.joinpath(BASE_DIR, r"\static") 
+    Path.joinpath(BASE_DIR, r"\static")
 ]
 # for upload photo
-MEDIA_ROOT = Path.joinpath(BASE_DIR, r"media") 
+MEDIA_ROOT = Path.joinpath(BASE_DIR, r"media")
 
 MEDIA_URL = '/media/'

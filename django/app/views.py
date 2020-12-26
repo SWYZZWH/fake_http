@@ -17,7 +17,7 @@ def index(request:HttpRequest):
     if request.method == "POST":
         id = request.POST.get("id", None)
         name = request.POST.get("name", None)
-
+        print(id,name)
         #id and name can both be None
         students = getStudentByIdAndName(id, name)
         if len(students) == 0:
@@ -113,8 +113,6 @@ def update_submit(request):
     if request.method != "POST":
         messages.add_message(request, messages.ERROR, "无效的请求！")
         return redirect("/index")
-
-
 
     s_form = StudentForm(request.POST, request.FILES)
     if not s_form.is_valid():

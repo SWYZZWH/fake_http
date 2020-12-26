@@ -3,38 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+    />
     <title>index</title>
   </head>
   <body>
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    <form action="/index" method="POST">
-      <label for="id">ID:</label><br />
-      <input type="input" id="id" /><br />
-      <label for="id">Name:</label><br />
-      <input type="input" id="name" />
-      <input type="submit" value="Search" />
-    </form>
-    {% if students %}
-    <ul>
-      {% for student in students %}
-      <li>
-        <a href="/info?id={{student.id}}/">{{student.id}}</a>
-        <a>{{student.name}}</a> <a href="/delete?id={{student.id}}/">Delete</a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>No results.</p>
-    {% endif %}
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible text-center"
+      role="alert"
+    >
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong
+        >{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}{{
+        message.tags|title }}{% endif %}:</strong
+      >
+      {{ message }}
+    </div>
+    {% endfor %} {% endif %}
 
-    <form action="/create">
-      <input type="submit" value="Add new student+" />
-    </form>
+    <div class="container">
+      <div class="row"><h1>&nbsp</h1></div>
+      <form action="/index" method="POST" class="form">
+        <div class="row">
+          <div class="col-5">
+            <input type="input" id="id" name="id" class="form-control" />
+          </div>
+          <div class="col-5">
+            <input type="input" id="name" name="name" class="form-control" />
+          </div>
+          <div class="col">
+            <input
+              type="submit"
+              class="form-control"
+              value="Search"
+              aria-label="Search"
+            />
+          </div>
+        </div>
+      </form>
+      <div class="row"><h3>&nbsp</h3></div>
+      <div class="row-cols-8">
+        {% if students %}
+        <ul>
+          {% for student in students %}
+          <li>
+            <a href="/info?id={{student.id}}/">{{student.id}}</a>
+            <a>{{student.name}}</a>
+            <a href="/delete?id={{student.id}}/">Delete</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="col-4 offset-5">
+          <p>No results.</p>
+        </div>
+        {% endif %}
+      </div>
+      <div class="row"><h2>&nbsp</h2></div>
+      <div class="row">
+        <div class="col-10">&nbsp</div>
+        <div class="col-2">
+          <form action="/create" class="form">
+            <input
+              type="submit"
+              class="form-control"
+              value="add a student"
+              aria-label="Create"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </body>
 </html>
