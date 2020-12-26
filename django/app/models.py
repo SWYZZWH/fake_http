@@ -8,6 +8,6 @@ class student(models.Model):
     
 
     def __str__(self):
-        return str(self.id) + self.name + str(self.photo.null)
+        return str(self.id) + self.name + str(self.photo)
 
     

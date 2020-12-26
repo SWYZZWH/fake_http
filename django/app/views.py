@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib.messages.api import success
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -18,8 +19,20 @@ def index(request:HttpRequest):
         id = request.POST.get("id", None)
         name = request.POST.get("name", None)
         print(id,name)
+
         #id and name can both be None
-        students = getStudentByIdAndName(id, name)
+        # 需要替换为
+        # students = getStudentByIdAndName(id, name)
+        students = student.objects.all()
+        print(students)
+        if id:
+            students = students.filter(id = id)
+        print(students)
+        if name:
+            students = students.filter(name = name)
+        print(students)
+
+
         if len(students) == 0:
             messages.add_message(request, messages.ERROR, "未找到学生！")
 
@@ -33,11 +46,14 @@ def delete(request):
     if id == None or existStudentById(id) == False:
         messages.add_message(request, messages.ERROR, "非法请求！")
     else:
-        success = deleteStudentById(id)
+        # 需要替换为
+        #success = deleteStudentById(id)
+        success = student.objects.filter(id=id).delete() != None
+
         if success == True:
-            messages.add_message(request, messages.ERROR, "删除失败！")
+            messages.add_message(request, messages.SUCCESS, "删除成功！")
         else:
-            messages.add_message(request, messages.INFO, "删除成功！")
+            messages.add_message(request, messages.ERROR, "删除失败！")
     return redirect("/index")
 
 ##################################################
@@ -62,79 +78,98 @@ def create_submit(request):
         return redirect("/index")
     
     s_form = StudentForm(request.POST, request.FILES)
-    if not s_form.is_valid():
+    
+
+    success = s_form.is_valid()
+    if not success:
         print(s_form.errors)
         messages.add_message(request, messages.ERROR, "表单非法！")
         return redirect("/index")
-        
-    s_form.save()
-    messages.add_message(request, messages.SUCCESS, "表单合法！")
 
-    id = s_form.cleaned_data["id"]
     name = s_form.cleaned_data["name"]
     photo = s_form.cleaned_data["photo"]
 
     if id == None or name == None:
         messages.add_message(request, messages.ERROR, "学号或姓名不能为空！")
         return redirect("/index")
-    
-    # if existStudentById(id):
-    #     messages.add_message(request, messages.ERROR, "不能创建已有的学生！")
-    #     return redirect("/index")
 
-    # s = student(id, name, photo)
-    # try:
-    #     createStudent(s)
-    # except Exception as e:
-    #     messages.add_message(request, messages.ERROR, "信息上传失败！")
+
+    # 需要替换为
+    # exsitStudentById(s_form.cleaned_data["id"]):
+    is_exist = student.objects.filter(id=s_form.cleaned_data["id"])
     
+
+
+    if is_exist:
+        messages.add_message(request, messages.ERROR, "不能创建已有的学生！")
+        return redirect("/index")
+
+
+    # 需要替换为
+    # createStudent(s_form):
+    s_form.save()
+
+
     
     messages.add_message(request, messages.INFO, "信息更新成功！")
     return redirect("/index")
 
 ####################################################
 @csrf_exempt
-def update(request):
-    id = request.GET.get("id")
+def update(request, id):
+    print(id)
     if id == None:
         messages.add_message(request, messages.ERROR, "学号不能为空！")
         return redirect("/index")
 
-    s = getStudentById(id)
-    if s == None or s.get("id") != id or s.get("name") == None:
-        messages.add_message(request, messages.ERROR, "未找到该学生！")
-        return redirect("/index")
+    # 需要替换为
+    # s = getStudentById(id)
+    s = student.objects.get(id = id)
+    print(s)
+    #if s is None or s.get("id") != id or s.get("name") == None:
+    #    messages.add_message(request, messages.ERROR, "未找到该学生！")
+    #    return redirect("/index")
 
     s_form = StudentForm(initial={"id":s.id, "name":s.name, "photo":s.photo})
+    print(request.path)
     return render(request, "info.html", {"form":s_form,"update":True,"base_url":request.path})
 
 @csrf_exempt
-def update_submit(request):
+def update_submit(request, id):
+
     if request.method != "POST":
         messages.add_message(request, messages.ERROR, "无效的请求！")
         return redirect("/index")
 
-    s_form = StudentForm(request.POST, request.FILES)
-    if not s_form.is_valid():
-        messages.add_message(request, messages.ERROR, "表单非法！")
-        return redirect("/index")
-        
-    s_form.save()
-    messages.add_message(request, messages.SUCCESS, "表单合法！")
-
-    id = s_form.cleaned_data["id"]
-    name = s_form.cleaned_data["name"]
-    photo = s_form.cleaned_data["photo"]
-
-    if id == None or name == None:
-        messages.add_message(request, messages.ERROR, "学号或姓名不能为空！")
+    
+    new_id = int(request.POST.get("id"))
+    if new_id != id:
+        messages.add_message(request, messages.ERROR, "不能修改ID！")
         return redirect("/index")
     
-    if id != request.GET.get("id", None):
-        messages.add_message(request, messages.ERROR, "学号不能修改！")
+    # 需要替换为
+    # s = getStudentById(id)
+    s = student.objects.get(id = id)
+
+
+
+    s_form = StudentForm(request.POST, request.FILES, instance = s)
+    
+
+
+
+    # 需要替换为
+    # success = updateStudent(s_form):
+    success = s_form.is_valid()
+    s_form.save()
+
+
+
+    if not success:
+        messages.add_message(request, messages.ERROR, "表单非法！")
         return redirect("/index")
 
-    s = student(id, name, photo)
+    messages.add_message(request, messages.SUCCESS, "表单合法！")
 
     # try:
     #     s = student(id, name, photo) 

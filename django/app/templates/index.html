@@ -24,9 +24,8 @@
         <span aria-hidden="true">&times;</span>
       </button>
       <strong
-        >{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}{{
-        message.tags|title }}{% endif %}:</strong
-      >
+        >{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}{{message.tags}}{% endif %}:</strong
+    >
       {{ message }}
     </div>
     {% endfor %} {% endif %}
@@ -57,9 +56,9 @@
         <ul>
           {% for student in students %}
           <li>
-            <a href="/info?id={{student.id}}/">{{student.id}}</a>
+            <a href="/update/{{student.id}}">{{student.id}}</a>
             <a>{{student.name}}</a>
-            <a href="/delete?id={{student.id}}/">Delete</a>
+            <a href="/delete?id={{student.id}}">Delete</a>
           </li>
           {% endfor %}
         </ul>
