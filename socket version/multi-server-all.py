@@ -223,7 +223,7 @@ def message_handle(client, info):
                 print("ID = ", row[0])
                 print("NAME = ", row[1])
                 print("PHOTO = ", row[2],'\n')
-                new_filename = os.path.join('./', 'server',row[2])
+                new_filename = os.path.join(os.getcwd(), 'server',row[2])
                 print(new_filename)
                 upload_image(client, new_filename)
         break

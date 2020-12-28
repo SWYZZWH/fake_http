@@ -44,7 +44,7 @@ def deal_data(conn):
         if buf:
             filename, filesize = struct.unpack('128sl', buf)
             fn = filename.decode().strip('\x00')
-            new_filename = os.path.join('./', 'media', fn)
+            new_filename = os.path.join(os.getcwd(), 'media', fn)
             print('file new name is {0}, filesize if {1}'.format(new_filename,
                                                                  filesize))
 
