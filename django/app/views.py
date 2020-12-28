@@ -22,15 +22,15 @@ def index(request:HttpRequest):
 
         #id and name can both be None
         # 需要替换为
-        # students = getStudentByIdAndName(id, name)
-        students = student.objects.all()
-        print(students)
-        if id:
-            students = students.filter(id = id)
-        print(students)
-        if name:
-            students = students.filter(name = name)
-        print(students)
+        students = getStudentByIdAndName(id, name)
+        # students = student.objects.all()
+        # print(students)
+        #         # if id:
+        #         #     students = students.filter(id = id)
+        #         # print(students)
+        #         # if name:
+        #         #     students = students.filter(name = name)
+        #         # print(students)
 
 
         if len(students) == 0:
@@ -97,7 +97,7 @@ def create_submit(request):
     # 需要替换为
     # exsitStudentById(s_form.cleaned_data["id"]):
     is_exist = student.objects.filter(id=s_form.cleaned_data["id"])
-    
+
 
 
     if is_exist:
@@ -124,7 +124,7 @@ def update(request, id):
 
     # 需要替换为
     # s = getStudentById(id)
-    s = student.objects.get(id = id)
+    s = getStudentById(id)
     print(s)
     #if s is None or s.get("id") != id or s.get("name") == None:
     #    messages.add_message(request, messages.ERROR, "未找到该学生！")
@@ -148,9 +148,7 @@ def update_submit(request, id):
         return redirect("/index")
     
     # 需要替换为
-    # s = getStudentById(id)
-    s = student.objects.get(id = id)
-
+    s = getStudentById(id)
 
 
     s_form = StudentForm(request.POST, request.FILES, instance = s)
