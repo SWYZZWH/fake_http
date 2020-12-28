@@ -157,9 +157,10 @@ def update_submit(request, id):
 
 
     # 需要替换为
-    # success = updateStudent(s_form):
-    success = s_form.is_valid()
-    s_form.save()
+    success = updateStudent(s_form)
+    print(s_form)
+    # success = s_form.is_valid()
+    # s_form.save()
 
 
 

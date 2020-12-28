@@ -9,7 +9,7 @@ import json
 
 
 HOST = '127.0.0.1'
-PORT = 65431
+PORT = 65434
 
 def upload_image(s):
     while 1:
@@ -109,7 +109,7 @@ def getStudentByName(Name:str) -> list:
     i = "LookUpByName"
     k = Name
     ## type: ADD, Delete, LOOKUP
-    a = {'query': i, 'Name': k}
+    a = {'query': i, 'name': k}
     j = json.dumps(a)
     s.send(str.encode(j))
     data = s.recv(1024).decode()
@@ -180,10 +180,11 @@ def createStudent(s_form:StudentForm) -> bool:
     return True
 
 def updateStudent(s_form:StudentForm) -> bool:
-    id = s_form.cleaned_data["id"]
+    id = s_form.initial["id"]
     name = s_form.cleaned_data["name"]
     photodir = getFiledirFromStudentForm(s_form)
-    
+    print(id,name,photodir)
+
     return True
     
 def deleteStudentById(id:int) -> bool:

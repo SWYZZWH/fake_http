@@ -10,9 +10,10 @@ while True:
     s.connect((HOST,PORT))
     i = input("query type:")
     j = input("student id:")
+    n = input("student name:")
     k = input("further info:")
     ## type: ADD, Delete, LOOKUP
-    a = {'query': i, 'id': j, 'info': k}
+    a = {'query': i, 'id': j, 'name':n,'info': k}
     j = json.dumps(a)
     s.send(str.encode(j))
     data = s.recv(1024)
