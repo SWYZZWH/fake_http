@@ -148,19 +148,17 @@ def update_submit(request, id):
         return redirect("/index")
     
     # 需要替换为
+    # s = student.objects.get(id=id)
     s = getStudentById(id)
 
 
     s_form = StudentForm(request.POST, request.FILES, instance = s)
-    
-
-
-
+    s_form.is_valid()
+    s_form.save()
     # 需要替换为
     success = updateStudent(s_form)
     print(s_form)
-    # success = s_form.is_valid()
-    # s_form.save()
+
 
 
 
