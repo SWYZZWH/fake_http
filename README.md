@@ -20,6 +20,10 @@ deleteById
 ### 依赖安装
 根目录 pip install -r requirements.txt
 
+### 混合版
+server端运行`socket version/multi-socket-all.py`，client端运行`django/manage.py`。
+即可在网页进行交互。
+
 ### Socket Version
 分为两个部分，server和client。其中server.py与client.py为基于单线程实现；multi开头的为多线程实现。
 
