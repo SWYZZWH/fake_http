@@ -5,7 +5,7 @@ import json
 
 
 HOST = '127.0.0.1'
-PORT = 65432
+PORT = 65439
 def upload_image(s):
     while 1:
         filepath = input('please input file path: ')
@@ -70,7 +70,7 @@ while True:
     a = {'query': i, 'id': j, 'name': k}
     j = json.dumps(a)
     s.send(str.encode(j))
-    if a['query'] == "UpdatePhoto" or a['query'] == "Insert":
+    if a['query'] == "Update" or a['query'] == "Insert":
         upload_image(s)
     data = s.recv(1024).decode()
     print(data)
@@ -80,11 +80,14 @@ while True:
         if json.loads(data) == "404":
             print("Not Found")
         else:
+            if json.loads(data) == "200":
+                print("good")
         #print(json.loads(data))
-            for row in json.loads(data):
-                #print(row)
-                print("ID = ", row[0])
-                print("NAME = ", row[1])
-                print("PHOTO = ", row[2],'\n')
-                deal_data(s)
+            else:
+                for row in json.loads(data):
+                    #print(row)
+                    print("ID = ", row[0])
+                    print("NAME = ", row[1])
+                    print("PHOTO = ", row[2],'\n')
+                    deal_data(s)
     s.close()

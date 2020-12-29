@@ -22,7 +22,10 @@ def index(request:HttpRequest):
 
         #id and name can both be None
         # 需要替换为
-        students = getStudentByIdAndName(id, name)
+        is_exist = existStudentById(id)
+
+        if is_exist:
+            students = getStudentByIdAndName(id, name)
         # students = student.objects.all()
         # print(students)
         #         # if id:
@@ -47,8 +50,7 @@ def delete(request):
         messages.add_message(request, messages.ERROR, "非法请求！")
     else:
         # 需要替换为
-        #success = deleteStudentById(id)
-        success = student.objects.filter(id=id).delete() != None
+        success = deleteStudentById(id)
 
         if success == True:
             messages.add_message(request, messages.SUCCESS, "删除成功！")
@@ -76,18 +78,20 @@ def create_submit(request):
     if request.method != "POST":
         messages.add_message(request, messages.ERROR, "无效的请求！")
         return redirect("/index")
-    
-    s_form = StudentForm(request.POST, request.FILES)
-    
 
-    success = s_form.is_valid()
-    if not success:
-        print(s_form.errors)
-        messages.add_message(request, messages.ERROR, "表单非法！")
-        return redirect("/index")
+    from django.core.files.storage import default_storage
+    from django.core.files.base import ContentFile
+    from django.conf import settings
+    ##s_form = StudentForm(request.POST, request.FILES, instance = s)
+    print(request.POST['id'], request.POST['name'])
 
-    name = s_form.cleaned_data["name"]
-    photo = s_form.cleaned_data["photo"]
+    data = request.FILES['photo']  # or self.files['image'] in your form
+
+    path = default_storage.save('tmp/somename.png', ContentFile(data.read()))
+    tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
+    id = request.POST['id']
+    name = request.POST['name']
 
     if id == None or name == None:
         messages.add_message(request, messages.ERROR, "学号或姓名不能为空！")
@@ -96,7 +100,7 @@ def create_submit(request):
 
     # 需要替换为
     # exsitStudentById(s_form.cleaned_data["id"]):
-    is_exist = student.objects.filter(id=s_form.cleaned_data["id"])
+    is_exist = existStudentById(id)
 
 
 
@@ -107,12 +111,12 @@ def create_submit(request):
 
     # 需要替换为
     # createStudent(s_form):
-    s_form.save()
+    success= createStudent(id,name,tmp_file)
 
 
-    
-    messages.add_message(request, messages.INFO, "信息更新成功！")
-    return redirect("/index")
+    if success:
+        messages.add_message(request, messages.INFO, "信息更新成功！")
+        return redirect("/index")
 
 ####################################################
 @csrf_exempt
@@ -151,15 +155,18 @@ def update_submit(request, id):
     # s = student.objects.get(id=id)
     s = getStudentById(id)
 
+    from django.core.files.storage import default_storage
+    from django.core.files.base import ContentFile
+    from django.conf import settings
+    ##s_form = StudentForm(request.POST, request.FILES, instance = s)
+    print(request.POST['id'],request.POST['name'])
 
-    s_form = StudentForm(request.POST, request.FILES, instance = s)
-    s_form.is_valid()
-    s_form.save()
-    # 需要替换为
-    success = updateStudent(s_form)
-    print(s_form)
+    data = request.FILES['photo']  # or self.files['image'] in your form
 
+    path = default_storage.save('tmp/somename.png', ContentFile(data.read()))
+    tmp_file = os.path.join(settings.MEDIA_ROOT, path)
 
+    success = updateStudent(request.POST['id'],request.POST['name'],tmp_file)
 
 
     if not success:
