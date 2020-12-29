@@ -163,13 +163,16 @@ def getStudentById(id:int) ->  student:
     return student(id=row[0],name =row[1],photo =row[2])
 
 def getStudentByIdAndName(id:int, name:str) ->  list:
-    l=getStudentByName(name)
-    print("getStudentByIdAndName",id,name)
     s = getStudentById(id)
-    if s and s not in l:
-        l.append(s)
-    # use createStudentFromFiledir(id, name, filedir) to create student
-    return l
+    if id and name is None:
+        return [s]
+    l = getStudentByName(name)
+    if id is None:
+        return l
+    for i in l:
+        if i.id == s.id:
+            return [s]
+    return []
 
 def createStudent(id,name,filedir) -> bool:
     print(id,name,filedir)
