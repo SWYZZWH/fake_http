@@ -9,12 +9,11 @@ import json
 
 
 HOST = '127.0.0.1'
-PORT = 65434
+PORT = 65431
 
-def upload_image(s):
+def upload_image(s,filepath):
+    # filepath='/Users/vioiano/Documents/GitHub/fake_http/photos/bob.png'
     while 1:
-        filepath = input('please input file path: ')
-        print(filepath)
         if os.path.isfile(filepath):
             # 定义定义文件信息。128s表示文件名为128bytes长，l表示一个int或log文件类型，在此为文件大小
             fileinfo_size = struct.calcsize('128sl')
@@ -127,7 +126,7 @@ def getStudentByName(Name:str) -> list:
                 print("NAME = ", row[1])
                 print("PHOTO = ", row[2], '\n')
                 deal_data(s)
-                stu_list.append(student(id=row[0],name =row[1],photo =row[2]))
+                stu_list.append(student(id=row[0],name =row[1],photo=row[2]))
     s.close()
 
     # use createStudentFromFiledir(id, name, filedir) to create student
@@ -160,32 +159,86 @@ def getStudentById(id:int) ->  student:
                 deal_data(s)
     s.close()
     # use createStudentFromFiledir(id, name, filedir) to create student
-
+    new_filename = os.path.join(os.getcwd(), 'media', row[2])
     return student(id=row[0],name =row[1],photo =row[2])
 
 def getStudentByIdAndName(id:int, name:str) ->  list:
-    l=getStudentByName(name)
-    print("getStudentByIdAndName",id,name)
     s = getStudentById(id)
-    if s and s not in l:
-        l.append(s)
-    # use createStudentFromFiledir(id, name, filedir) to create student
-    return l
+    if id and name is None:
+        return [s]
+    l = getStudentByName(name)
+    if id is None:
+        return l
+    for i in l:
+        if i.id == s.id:
+            return [s]
+    return []
 
-def createStudent(s_form:StudentForm) -> bool:
-    id = s_form.cleaned_data["id"]
-    name = s_form.cleaned_data["name"]
-    photodir = getFiledirFromStudentForm(s_form)
+def createStudent(id,name,filedir) -> bool:
+    print(id,name,filedir)
+    print("getStudentById", id)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+    i = "Insert"
+    k = id
+    ## type: ADD, Delete, LOOKUP
+    a = {'query': i, 'id': k, 'name':name}
+    print(a)
+    j = json.dumps(a)
+    s.send(str.encode(j))
+    upload_image(s, filedir)
+    data = s.recv(1024).decode()
+    s.close()
+    if data == b'':
+        return False
+    else:
+        if json.loads(data) == "404":
+            return False
+        else:
+            return True
 
-    return True
 
-def updateStudent(s_form:StudentForm) -> bool:
-    id = s_form.initial["id"]
-    name = s_form.cleaned_data["name"]
-    photodir = getFiledirFromStudentForm(s_form)
-    print(id,name,photodir)
 
-    return True
+def updateStudent(id,name,filedir) -> bool:
+    print(id,name,filedir)
+    print("getStudentById", id)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+    i = "Update"
+    k = id
+    ## type: ADD, Delete, LOOKUP
+    a = {'query': i, 'id': k, 'name':name}
+    print(a)
+    j = json.dumps(a)
+    s.send(str.encode(j))
+    upload_image(s, filedir)
+    data = s.recv(1024).decode()
+    s.close()
+    if data == b'':
+        return False
+    else:
+        if json.loads(data) == "404":
+            return False
+        else:
+            return True
     
 def deleteStudentById(id:int) -> bool:
-    return True
+    print("getStudentById", id)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+    i = "DeleteByID"
+    k = id
+    ## type: ADD, Delete, LOOKUP
+    a = {'query': i, 'id': k}
+    print(a)
+    j = json.dumps(a)
+    s.send(str.encode(j))
+    data = s.recv(1024).decode()
+    s.close()
+    if data == b'':
+        return False
+    else:
+        if json.loads(data) == "404":
+            return False
+        else:
+            return True

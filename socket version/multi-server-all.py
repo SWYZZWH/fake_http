@@ -100,8 +100,9 @@ def dbInsert(id,name,client,address):
     conn.commit()
     deal_data(client, address,"{}.png".format(id))
     print("updated:")
-    a = dbLookUpByID(id)
-    print(a)
+    ##a=dbLookUpByID(id)
+    print("200")
+    a = json.dumps("200")
     conn.close()
     print("Operation done successfully")
     return True,a
@@ -112,8 +113,7 @@ def dbDeleteByID(id):
     print("Opened database successfully")
     cur.execute("DELETE from app_student where id={}".format(id))
     conn.commit()
-    print("updated:")
-    a = dbAllInfo()
+    a = json.dumps("200")
     conn.close()
     print("Operation done successfully")
     return True,a
@@ -141,8 +141,10 @@ def dbUpdate(id,name,client,address):
     conn.commit()
     deal_data(client, address,"{}.png".format(id))
     print("updated:")
-    a=dbLookUpByID(id)
-    print(a)
+    ##a=dbLookUpByID(id)
+    print("200")
+    a = json.dumps("200")
+
     conn.close()
     print("Operation done successfully")
     return "True",a
@@ -197,7 +199,7 @@ g_socket_server = None  # 负责监听的socket
 
 def init():
     HOST = '127.0.0.1'
-    PORT = 65434
+    PORT = 65431
     print("Server is starting")
     global sock
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -217,7 +219,7 @@ def message_handle(client, info):
         data = parseQuery(data,client,info)
         res = str.encode(data)
         client.sendall(res)
-        if json.loads(data) != "404":
+        if json.loads(data) != "404" and json.loads(data) != "200":
             for row in json.loads(data):
                 #print(row)
                 print("ID = ", row[0])
