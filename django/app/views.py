@@ -147,22 +147,15 @@ def update_submit(request, id):
         messages.add_message(request, messages.ERROR, "不能修改ID！")
         return redirect("/index")
     
-    # 需要替换为
-    s = getStudentById(id)
+    # 这个不要换
+    student.objects.filter(id=id).delete()
 
-
-    s_form = StudentForm(request.POST, request.FILES, instance = s)
+    s_form = StudentForm(request.POST, request.FILES)
     
-
-
-
-    # 需要替换为
-    success = updateStudent(s_form)
-    print(s_form)
-    # success = s_form.is_valid()
-    # s_form.save()
-
-
+    success = s_form.is_valid()
+    s_form.save()
+    # 不是替换，而是添加 save 到远端逻辑
+    # success = updateStudent(s_form)
 
     if not success:
         messages.add_message(request, messages.ERROR, "表单非法！")
